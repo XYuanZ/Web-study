@@ -1,0 +1,20 @@
+{
+  "name": "vue2-review",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "vue": "^2.7.16",
+    "vue-router": "^3.6.5",
+    "vuex": "^3.1.0"
+  },
+  "devDependencies": {
+    "vite": "^4.0.0",
+    "vite-plugin-vue2": "^2.0.3"
+  }
+}
