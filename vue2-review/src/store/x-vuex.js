@@ -18,7 +18,6 @@ class Store {
             // 转换为computed可以使用无参数形式
             computed[key] = () => fn(options.state);
             // 为getters定义只读属性
-            console.log("getters", options.state, key, computed[key]);
             Object.defineProperty(store.getters, key, {
                 get: function () {
                     return store._vm.computed[key]()
