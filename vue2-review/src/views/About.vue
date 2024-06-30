@@ -1,11 +1,11 @@
 <template>
-    <h1 class="home">a home page</h1>
+    <h1 class="about">a about page</h1>
 </template>
 <script >
 
 </script>
 <style >
-.home {
+.about {
     text-align: center;
 }
 </style>
