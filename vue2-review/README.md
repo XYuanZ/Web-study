@@ -11,3 +11,4 @@
 - 响应式state实现
 - commit实现
 - dispatch实现
+- getters实现
