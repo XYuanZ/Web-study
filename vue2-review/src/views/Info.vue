@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1 class="info">a info page</h1>
+        <h4 class="info">a info page</h4>
     </div>
 </template>
 <script >

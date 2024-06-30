@@ -5,6 +5,26 @@ class Store {
         // 保留选项
         this._mutaions = options.mutations || {};
         this._actions = options.actions || {};
+        this._wrappedGetters = options.getters || {};
+
+        // 定义computed选项
+        const computed = {};
+        this.getters = {};
+        // {doubleCount(state){}}
+        const store = this;
+        Object.keys(this._wrappedGetters).forEach(key => {
+            // 获取用户定义的getter
+            const fn = this._wrappedGetters[key];
+            // 转换为computed可以使用无参数形式
+            computed[key] = () => fn(options.state);
+            // 为getters定义只读属性
+            console.log("getters", options.state, key, computed[key]);
+            Object.defineProperty(store.getters, key, {
+                get: function () {
+                    return store._vm.computed[key]()
+                }
+            });
+        });
 
         // 做响应式状态state属性
         // Vue初始化的时候，会对data做响应式处理
@@ -13,6 +33,7 @@ class Store {
             data: {
                 // 加上两个$$是为了防止和vue的内部属性冲突，同时就不会代理
                 $$state: options.state,
+                computed
             }
         });
 

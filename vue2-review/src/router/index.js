@@ -19,6 +19,7 @@ const routes = [
         children: [
             {
                 path: 'info',
+                name: 'AboutInfo',
                 component: () => import('@/views/Info.vue'),
             }
         ]
