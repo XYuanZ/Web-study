@@ -1,3 +1,6 @@
+import Link from './xrouter-link';
+import View from './xrouter-view';
+
 let Vue;
 
 // 实现一个VueRouter类,是一个插件
@@ -6,21 +9,52 @@ class VueRouter {
         this.$options = options;
 
         // 缓存path和route映射关系
-        this.routeMap = {};
-        this.$options.routes.forEach(route => {
-            this.routeMap[route.path] = route;
-        });
+        // this.routeMap = {};
+        // this.$options.routes.forEach(route => {
+        //     this.routeMap[route.path] = route;
+        // });
 
         // 1.保存当前hash到current
         // current必须是响应式的数据
-        const current = window.location.hash.slice(1) || '/';
-        Vue.util.defineReactive(this, 'current', current);
+        // const current = window.location.hash.slice(1) || '/';
+        // Vue.util.defineReactive(this, 'current', current);
+
+        this.current = window.location.hash.slice(1) || '/';
+        Vue.util.defineReactive(this, 'matched', []);
+        // match方法可以递归遍历路由表，获取匹配关系数组
+        this.match();
+
 
         // 2.监听hash变化
         window.addEventListener('hashchange', () => {
             // 3.更新current(获取#后面的部分)
-            this.current = window.location.hash.slice(1);
+            this.onHashChange();
         });
+    }
+    match(routes) {
+        routes = routes || this.$options.routes;
+        for (const route of routes) {
+            if (route.path === '/' && this.current === '/') {
+                this.matched.push(route);
+                return;
+            }
+
+            // /about/info
+            if (route.path !== '/' && this.current.indexOf(route.path) != -1) {
+                this.matched.push(route);
+                if (route.children) {
+                    this.match(route.children);
+                }
+                return;
+            }
+        }
+    }
+
+    onHashChange() {
+        this.current = window.location.hash.slice(1);
+        this.matched = [];
+        this.match();
+        console.log("matched", this.matched);
     }
 }
 
@@ -42,41 +76,7 @@ VueRouter.install = function (_Vue) {
     });
 
     // 实现两个全局组件route-view和route-link
-    Vue.component('router-view', {
-        render(h) {
-            // 根据current获取路由表中对应的组件并渲染它
-            let component = null;
-
-            // 方法一：遍历路由表，找到匹配的组件
-            // const route = this.$router.$options.routes.find(route => {
-            //     return route.path === this.$router.current;
-            // });
-
-            // 方法二：使用routeMap缓存路由表
-            const route = this.$router.routeMap[this.$router.current];
-            if (route) {
-                component = route.component;
-            }
-            return h(component);
-        },
-    });
-
-    Vue.component('router-link', {
-        props: {
-            to: {
-                type: String,
-                required: true,
-            },
-        },
-        // <a href="#/abc">abc</a>
-        // <router-link to="/abc">abc</router-link>
-        render(h) {
-            return h('a', {
-                attrs: {
-                    href: '#' + this.to,
-                },
-            }, [this.$slots.default]);
-        }
-    });
+    Vue.component('router-view', View);
+    Vue.component('router-link', Link);
 }
 export default VueRouter;
