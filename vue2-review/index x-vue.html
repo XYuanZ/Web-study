@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title</title>
+  </head>
+  <body>
+    <div id="app">
+      <p @click="add">{{count}}</p>
+      <p v-text="count"></p>
+      <p v-html="desc"></p>
+      <p>数组：{{arr}}</p>
+      <input type="text" v-model="desc">
+    </div>
+  </body>
+</html>
+<script src="./src/utils/x-vue.js"></script>
+<script>
+  const app = new Vue({
+    el: '#app',
+    data: {
+      count: 0,
+      desc: '<h1>Hello</h1>',
+      arr:[0]
+    },
+    methods: {
+      add(){
+        this.count++;
+      }
+    },
+  });
+  setInterval(() => {
+    // app.count++;
+    app.arr.push(app.count);
+    console.log("arr",app.arr);
+  },1000)
+</script>
